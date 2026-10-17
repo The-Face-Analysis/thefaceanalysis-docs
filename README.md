@@ -19,4 +19,4 @@ npm run serve     # http://localhost:4000
   the dependency here and redeploy.
 - The MCP client setup text (`content/shared.json`) is a snapshot of the verified commands on
   [thefaceanalysis.com/mcp](https://thefaceanalysis.com/mcp). Client menus change; update both when one does.
-- Deploy: `Dockerfile` (Node build, nginx serve). Code MIT, aggregate data CC BY 4.0.
+- Deploy: `Dockerfile` (Node build, then `server.mjs`, a dependency-free static server on port 8080). Code MIT, aggregate data CC BY 4.0.
