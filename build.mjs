@@ -299,6 +299,8 @@ const nav = buildNav(clients);
 const flat = nav.flatMap(([, items]) => items.map(([path, label]) => ({ path, label }))).filter((x) => x.path !== "/llms.txt");
 rmSync("dist", { recursive: true, force: true });
 mkdirSync("dist/assets", { recursive: true });
+// public/: IndexNow anahtar dosyası gibi kökte durması gereken dosyalar.
+cpSync("public", "dist", { recursive: true });
 writeFileSync("dist/assets/docs.css", CSS.trim());
 writeFileSync("dist/assets/docs.js", JS.trim());
 const outPath = (p) => (p === "/" ? "dist/index.html" : `dist${p}.html`);
