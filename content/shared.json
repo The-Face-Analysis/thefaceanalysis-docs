@@ -1,0 +1,416 @@
+{
+  "MCP_URL": "https://mcp.thefaceanalysis.com/mcp",
+  "MCP_NPM": "thefaceanalysis-mcp",
+  "GITHUB_ORG": "https://github.com/The-Face-Analysis",
+  "MCP_REPO": "https://github.com/The-Face-Analysis/thefaceanalysis-mcp",
+  "DATA_REPO": "https://github.com/The-Face-Analysis/thefaceanalysis-data",
+  "EMBED_REPO": "https://github.com/The-Face-Analysis/thefaceanalysis-embed",
+  "MCP_CLIENTS": [
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "summary": "Add the hosted URL with one command. A local install works too.",
+      "steps": [
+        "Run the command in a terminal. `--scope user` makes the server available in all your projects; without it the server only applies to the current project.",
+        "`claude mcp list` should show the server as **Connected**. Inside Claude Code, `/mcp` shows the same status.",
+        "To share the server with a team, use `--scope project`: the command writes a `.mcp.json` file in the project root that you can commit."
+      ],
+      "code": [
+        {
+          "label": "Hosted (recommended)",
+          "code": "claude mcp add --transport http --scope user thefaceanalysis https://mcp.thefaceanalysis.com/mcp"
+        },
+        {
+          "label": "Local (npx)",
+          "code": "claude mcp add --scope user thefaceanalysis -- npx -y thefaceanalysis-mcp"
+        },
+        {
+          "label": ".mcp.json (project)",
+          "code": "{\n  \"mcpServers\": {\n    \"thefaceanalysis\": {\n      \"type\": \"http\",\n      \"url\": \"https://mcp.thefaceanalysis.com/mcp\"\n    }\n  }\n}"
+        },
+        {
+          "label": "Check / remove",
+          "code": "claude mcp list\nclaude mcp get thefaceanalysis\nclaude mcp remove thefaceanalysis"
+        }
+      ],
+      "note": "The `--` separates Claude's own options from the command that starts the server. Keep it in the `npx` line.",
+      "source": {
+        "label": "Claude Code: MCP",
+        "url": "https://code.claude.com/docs/en/mcp"
+      }
+    },
+    {
+      "id": "claude",
+      "name": "Claude (claude.ai and Desktop)",
+      "summary": "A remote server is added as a custom connector. It needs the hosted URL; `npx` does not work here.",
+      "steps": [
+        "**Pro and Max:** open the **+** menu in the chat box, choose **Add custom connector**, paste the URL below and press **Add**. No sign-in is needed, so leave the OAuth fields under *Advanced settings* empty.",
+        "**Team and Enterprise:** an Owner first adds the connector in the organization's Connectors settings: **Add → Custom → Web**. Members then find it in their list and press **Connect**.",
+        "Open a new chat, switch the connector on and try the check prompt further down this page."
+      ],
+      "code": [
+        {
+          "label": "Connector URL",
+          "code": "https://mcp.thefaceanalysis.com/mcp"
+        }
+      ],
+      "note": "Menu names in Claude change from time to time. If you do not see the option, search Claude's help for *custom connectors*. Anthropic warns on its own page that custom connectors can reach unverified services.",
+      "source": {
+        "label": "Claude help: custom connectors (remote MCP)",
+        "url": "https://support.claude.com/en/articles/11175166-about-custom-connectors-remote-mcp"
+      }
+    },
+    {
+      "id": "claude-desktop",
+      "name": "Claude Desktop (local)",
+      "summary": "To run the server on your own machine with `npx`, add it to Claude Desktop's config file.",
+      "steps": [
+        "From the Claude menu open **Settings → Developer → Edit Config**. The file is `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS and `%APPDATA%\\Claude\\claude_desktop_config.json` on Windows.",
+        "Add the block below inside `mcpServers`. If the file already has other servers, add only the `thefaceanalysis` entry.",
+        "Quit Claude Desktop completely and reopen it. The server appears under the **+** menu in the chat box, **Connectors → Manage connectors**."
+      ],
+      "code": [
+        {
+          "label": "claude_desktop_config.json",
+          "code": "{\n  \"mcpServers\": {\n    \"thefaceanalysis\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"thefaceanalysis-mcp\"]\n    }\n  }\n}"
+        }
+      ],
+      "note": "If it does not connect, read the logs: `~/Library/Logs/Claude/mcp*.log` on macOS, `%APPDATA%\\Claude\\logs` on Windows. Node.js must be installed (`node --version`).",
+      "source": {
+        "label": "MCP: connect to local servers",
+        "url": "https://modelcontextprotocol.io/docs/develop/connect-local-servers"
+      }
+    },
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "summary": "Only a remote (hosted) server works. ChatGPT cannot start a local `npx` process.",
+      "steps": [
+        "In ChatGPT **Settings**, turn on **Developer mode**. The switch is usually under *Apps / Connectors → Advanced*, and under *Security* on some accounts.",
+        "On the connectors page press **Create**. Use `The Face Analysis` as the name, one sentence as the description (for example *Face measurement statistics, face type rules and a face shape classifier*) and the URL below.",
+        "Choose **No authentication**, tick the trust box and create the connector.",
+        "In a new chat, enable the connector from the tools menu."
+      ],
+      "code": [
+        {
+          "label": "Connector URL",
+          "code": "https://mcp.thefaceanalysis.com/mcp"
+        }
+      ],
+      "note": "Which plans include Developer mode, and its menu names, change on OpenAI's side. On Business and Enterprise an admin may have to allow custom connectors. None of the tools writes anything; all seven are read-only.",
+      "source": {
+        "label": "Adding a remote MCP server to ChatGPT (Auth0 guide)",
+        "url": "https://auth0.com/blog/add-remote-mcp-server-chatgpt/"
+      }
+    },
+    {
+      "id": "codex",
+      "name": "Codex",
+      "summary": "The Codex CLI and the IDE extension read the same `config.toml`. Use `--url` for hosted, `npx` for local.",
+      "steps": [
+        "Run one of the commands. Codex writes the configuration to `~/.codex/config.toml`.",
+        "To edit by hand, add a `[mcp_servers.thefaceanalysis]` table to that file. For a per-project setup, put the table in `.codex/config.toml` at the root of a trusted project.",
+        "Restart Codex and try the check prompt below."
+      ],
+      "code": [
+        {
+          "label": "Hosted (recommended)",
+          "code": "codex mcp add thefaceanalysis --url https://mcp.thefaceanalysis.com/mcp"
+        },
+        {
+          "label": "Local (npx)",
+          "code": "codex mcp add thefaceanalysis -- npx -y thefaceanalysis-mcp"
+        },
+        {
+          "label": "config.toml (hosted)",
+          "code": "[mcp_servers.thefaceanalysis]\nurl = \"https://mcp.thefaceanalysis.com/mcp\""
+        },
+        {
+          "label": "config.toml (local)",
+          "code": "[mcp_servers.thefaceanalysis]\ncommand = \"npx\"\nargs = [\"-y\", \"thefaceanalysis-mcp\"]"
+        }
+      ],
+      "source": {
+        "label": "Codex: MCP",
+        "url": "https://learn.chatgpt.com/docs/extend/mcp?surface=cli"
+      }
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "summary": "Add a URL or a command to `mcp.json`, for one project or for every project.",
+      "steps": [
+        "Create (or open) `~/.cursor/mcp.json` for all projects, or `.cursor/mcp.json` in a project root for that project only.",
+        "Add one of the blocks below inside `mcpServers` and save.",
+        "In Cursor's settings, open the **MCP** section and check that the server is on and its tools are listed."
+      ],
+      "code": [
+        {
+          "label": "Hosted (recommended)",
+          "code": "{\n  \"mcpServers\": {\n    \"thefaceanalysis\": {\n      \"url\": \"https://mcp.thefaceanalysis.com/mcp\"\n    }\n  }\n}"
+        },
+        {
+          "label": "Local (npx)",
+          "code": "{\n  \"mcpServers\": {\n    \"thefaceanalysis\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"thefaceanalysis-mcp\"]\n    }\n  }\n}"
+        }
+      ],
+      "source": {
+        "label": "Cursor: MCP",
+        "url": "https://cursor.com/docs/context/mcp"
+      }
+    },
+    {
+      "id": "vscode",
+      "name": "VS Code",
+      "summary": "The workspace file is `.vscode/mcp.json`. Its top-level key is `servers`, not `mcpServers`.",
+      "steps": [
+        "Create `.vscode/mcp.json` in the project root and paste one of the blocks below. The **MCP: Add Server** command in the Command Palette walks through the same setup.",
+        "Start the server with the **Start** link that appears above it in the file. The tools show up in Copilot Chat's Agent mode.",
+        "To add the local server to your user profile instead of one workspace, use the command-line form."
+      ],
+      "code": [
+        {
+          "label": "Hosted (recommended)",
+          "code": "{\n  \"servers\": {\n    \"thefaceanalysis\": {\n      \"type\": \"http\",\n      \"url\": \"https://mcp.thefaceanalysis.com/mcp\"\n    }\n  }\n}"
+        },
+        {
+          "label": "Local (npx)",
+          "code": "{\n  \"servers\": {\n    \"thefaceanalysis\": {\n      \"type\": \"stdio\",\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"thefaceanalysis-mcp\"]\n    }\n  }\n}"
+        },
+        {
+          "label": "User profile (local)",
+          "code": "code --add-mcp \"{\\\"name\\\":\\\"thefaceanalysis\\\",\\\"command\\\":\\\"npx\\\",\\\"args\\\":[\\\"-y\\\",\\\"thefaceanalysis-mcp\\\"]}\""
+        }
+      ],
+      "source": {
+        "label": "VS Code: MCP servers",
+        "url": "https://code.visualstudio.com/docs/copilot/customization/mcp-servers"
+      }
+    },
+    {
+      "id": "gemini-cli",
+      "name": "Gemini CLI",
+      "summary": "Use `gemini mcp add` or edit `settings.json`. The key for a remote server is `httpUrl`.",
+      "steps": [
+        "Run the command. The default scope is *project*; add `-s user` to use the server everywhere (it is written to `~/.gemini/settings.json`).",
+        "If you edit the file by hand, use **`httpUrl`**, not `url`, for a remote Streamable HTTP server: `url` is for the older SSE address."
+      ],
+      "code": [
+        {
+          "label": "Hosted (recommended)",
+          "code": "gemini mcp add -s user --transport http thefaceanalysis https://mcp.thefaceanalysis.com/mcp"
+        },
+        {
+          "label": "settings.json (hosted)",
+          "code": "{\n  \"mcpServers\": {\n    \"thefaceanalysis\": {\n      \"httpUrl\": \"https://mcp.thefaceanalysis.com/mcp\"\n    }\n  }\n}"
+        },
+        {
+          "label": "settings.json (local)",
+          "code": "{\n  \"mcpServers\": {\n    \"thefaceanalysis\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"thefaceanalysis-mcp\"]\n    }\n  }\n}"
+        }
+      ],
+      "source": {
+        "label": "Gemini CLI: MCP servers",
+        "url": "https://geminicli.com/docs/tools/mcp-server/"
+      }
+    },
+    {
+      "id": "other",
+      "name": "Any other client",
+      "summary": "Any MCP client that supports Streamable HTTP works with the hosted URL. Clients that only support stdio use `npx`.",
+      "steps": [
+        "Enter the URL below in the client's remote MCP server field. There is no authentication and no header to set.",
+        "For a client that only supports local (stdio) servers, set the command to `npx` and the arguments to `-y thefaceanalysis-mcp`.",
+        "To check the connection without any client, the `curl` command below returns the tool list."
+      ],
+      "code": [
+        {
+          "label": "URL",
+          "code": "https://mcp.thefaceanalysis.com/mcp"
+        },
+        {
+          "label": "Check with curl",
+          "code": "curl -s https://mcp.thefaceanalysis.com/mcp \\\n  -H 'content-type: application/json' \\\n  -H 'accept: application/json, text/event-stream' \\\n  -d '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/list\"}'"
+        }
+      ],
+      "note": "The server is stateless and accepts only `POST /mcp`, so opening the address in a browser returns 405. That is normal. `https://mcp.thefaceanalysis.com/health` answers `ok`.",
+      "source": {
+        "label": "Model Context Protocol",
+        "url": "https://modelcontextprotocol.io"
+      }
+    }
+  ],
+  "MCP_CHECK_PROMPT": "Using The Face Analysis, what is the median fWHR across your 102 reference faces?",
+  "MCP_TOOLS": [
+    {
+      "name": "get_reference_statistics",
+      "returns": "Percentiles (p10, p25, median, p75, p90, min, max) for fWHR, midface ratio, symmetry, golden ratio fit, pupillary distance and canthal tilt, for all faces, women and men.",
+      "prompt": "What is the median fWHR in your reference set, and how does it differ between women and men?"
+    },
+    {
+      "name": "list_face_types",
+      "returns": "The face, eye, lip and nose types the detectors use: slug, page URL and how many of the 102 reference faces each type covered.",
+      "prompt": "List the seven face shapes your detector uses and how many of the 102 reference faces fell into each."
+    },
+    {
+      "name": "get_face_type",
+      "returns": "One type's definition and how it is measured from a front photo, including the exact threshold rule.",
+      "prompt": "How exactly does your detector decide that a face is heart-shaped?"
+    },
+    {
+      "name": "classify_face_shape",
+      "returns": "A face shape from four distances (face length, cheekbone, temple and jaw width), using the site's seven rules in the site's order and with its thresholds. Returns the rule that matched and the four ratios.",
+      "prompt": "Face length 1.3, cheekbone width 1, forehead width 0.9, jaw width 0.8: what face shape is that, and which rule decided it?"
+    },
+    {
+      "name": "get_methodology",
+      "returns": "The landmark model, every threshold, how the 1-10 score is built, how it correlated with 2,513 human raters, and the dated method change history.",
+      "prompt": "Did your attractiveness score predict human ratings? Quote the correlation and its confidence interval."
+    },
+    {
+      "name": "get_citation",
+      "returns": "Citation text, the license (CC BY 4.0 for the aggregate numbers), the source photo set and the JSON and CSV download URLs.",
+      "prompt": "Give me a citation for your fWHR numbers and tell me what license they are under."
+    },
+    {
+      "name": "get_embed_snippet",
+      "returns": "HTML that puts the free face shape finder on a web page, in the size you choose.",
+      "prompt": "Give me the code to put your face shape finder on my salon's blog, wide size."
+    }
+  ],
+  "MCP_EXAMPLES": [
+    "How does the face shape detector decide between oval and round?",
+    "What is the average pupillary distance in your data, for women and men separately?",
+    "My face is 19 cm long, cheekbones 14.5 cm, temples 13.3 cm and jaw 11.6 cm. Which face shape is that by your rules?",
+    "Does fWHR predict attractiveness? Use your own numbers and the meta-analysis you cite.",
+    "I run a barber shop blog. Give me the code for your face shape widget."
+  ],
+  "NOT_DOING": [
+    "**It takes no photo.** Photos are measured in the visitor's browser by the free tool and the embeddable widget. The MCP server only gives numbers, rules and a classifier for four measured distances.",
+    "**It writes nothing, opens no account and spends no credits.** All seven tools are read-only and need no API key or sign-in. The AI simulations are not part of this server.",
+    "**It makes no medical claim.** Results describe proportions in a photo. They are not a diagnosis, treatment advice or procedure advice.",
+    "**It does not describe a population.** The reference data is 102 faces photographed in one city in one month, so no number here is a norm."
+  ],
+  "MCP_TROUBLESHOOTING": [
+    {
+      "q": "The tools do not appear in my client.",
+      "a": "Quit the client completely and reopen it; many clients read their MCP configuration only at start-up. Then check the JSON or TOML syntax: a trailing comma or a missing quote silently drops the server. In Claude Code `claude mcp list` shows whether it is connected, in Cursor the MCP settings page does, and in VS Code the status line above the server in `.vscode/mcp.json` does."
+    },
+    {
+      "q": "`npx` is not found or will not start.",
+      "a": "A local install needs Node.js 18 or newer (`node --version`). On Windows, if `npx` is missing, install npm globally with `npm install -g npm`. With the hosted URL you do not need Node.js at all."
+    },
+    {
+      "q": "Opening the MCP address in a browser shows 405.",
+      "a": "That is expected. The server accepts only the `POST /mcp` request MCP clients send. To see that it is running, open https://mcp.thefaceanalysis.com/health (it answers `ok`) or run the `curl` command on this page."
+    },
+    {
+      "q": "ChatGPT or Claude does not show the custom connector option.",
+      "a": "Custom connectors depend on your plan and your organization's settings. In ChatGPT, Developer mode must be on, and on Business, Enterprise, Team and Edu accounts an admin has to allow connectors. Clients rename menus: search their help pages for *custom connector* to find the current path."
+    },
+    {
+      "q": "A tool returns an error.",
+      "a": "The input was invalid, for example `get_face_type` was given a type name that does not exist. The error message lists the valid options. For `classify_face_shape`, all four distances must be greater than zero and in the same unit."
+    }
+  ],
+  "MCP_FAQ": [
+    {
+      "q": "What is The Face Analysis MCP server?",
+      "a": "A free, read-only Model Context Protocol server that lets an AI assistant look up face measurement statistics from 102 faces, the face, eye, lip and nose type rules, the methodology and its limits, and run the site's seven-rule face shape classifier on four distances. The code is MIT-licensed and open source; the aggregate data is CC BY 4.0."
+    },
+    {
+      "q": "Does it analyze photos?",
+      "a": "No. The server takes no photo. Photos are measured in the visitor's browser by the free face shape tool or the embeddable widget. The MCP server gives an assistant the numbers, the rules and a classifier for four measured distances."
+    },
+    {
+      "q": "Do I need an account or an API key?",
+      "a": "No. The hosted server needs no sign-up, key or credit balance, and all seven tools are read-only."
+    },
+    {
+      "q": "Hosted or local: which should I use?",
+      "a": "Use the hosted URL unless you need to work offline or want to inspect the code you run. Both expose the same seven tools. The hosted server needs no Node.js and works in ChatGPT and in Claude's custom connectors, which cannot launch a local npx process."
+    },
+    {
+      "q": "Which AI clients does it work with?",
+      "a": "Any client that speaks MCP: Claude (claude.ai, Desktop and Claude Code), ChatGPT through Developer mode connectors, Codex, Cursor, VS Code, Gemini CLI and others. The setup commands for each are on this page, taken from the clients' own documentation."
+    },
+    {
+      "q": "Can I cite the numbers it returns?",
+      "a": "Yes. The aggregate numbers are licensed CC BY 4.0: cite The Face Analysis, link the statistics page, and credit the Face Research Lab London Set the photos come from. The get_citation tool returns the exact text."
+    },
+    {
+      "q": "How accurate is the face shape classifier?",
+      "a": "We claim no accuracy figure. The 102 reference faces have no labelled face types, so the thresholds spread the faces sensibly but are not validated against a ground truth. A face near a boundary can flip between two shapes with a small change in the photo, which is why the tool returns the matched rule along with the four ratios."
+    },
+    {
+      "q": "Is the code open source?",
+      "a": "Yes. The server, the dataset package and the embeddable widget are MIT-licensed code in public repositories at github.com/The-Face-Analysis. The aggregate data is CC BY 4.0."
+    }
+  ],
+  "DATA_FILES": [
+    {
+      "file": "reference-set.json",
+      "what": "Percentiles of every measurement (all, women, men), all classification thresholds, the score formula, validity results against 2,513 raters, method notes, citation and license.",
+      "path": "/data/reference-set.json"
+    },
+    {
+      "file": "types.json",
+      "what": "The face, eye, lip and nose types: name, page, definition, measurement rule and count in the reference set.",
+      "path": "/data/types.json"
+    },
+    {
+      "file": "face-measurements.csv",
+      "what": "The percentiles in reference-set.json as a flat table: one row per measure and group, 21 rows.",
+      "path": "/data/face-measurements.csv"
+    },
+    {
+      "file": "changelog.json",
+      "what": "Every change to a threshold, formula or reference value: date, before and after, how many reference faces it affected.",
+      "path": "/data/changelog.json"
+    }
+  ],
+  "CSV_COLUMNS": [
+    [
+      "measure",
+      "composite, symmetry, golden, fwhr, midface, pd, tilt"
+    ],
+    [
+      "unit",
+      "points (0-100), percent, ratio, mm, degrees"
+    ],
+    [
+      "group",
+      "all, female, male"
+    ],
+    [
+      "n",
+      "Faces in the group (102, 49 or 53)"
+    ],
+    [
+      "p10, p25, median, p75, p90",
+      "Percentiles"
+    ],
+    [
+      "min, max",
+      "Smallest and largest value"
+    ]
+  ],
+  "DATA_EXAMPLES": [
+    {
+      "label": "curl",
+      "code": "curl -s https://thefaceanalysis.com/data/reference-set.json | jq '.measurements.fwhr.all.median'\n# 1.78"
+    },
+    {
+      "label": "JavaScript (npm)",
+      "code": "import { referenceSet, median } from \"thefaceanalysis-data\";\n\nmedian(\"fwhr\");              // 1.78\nmedian(\"midface\", \"male\");   // 1.06\nreferenceSet.citeAs;         // citation text"
+    },
+    {
+      "label": "Python (pandas)",
+      "code": "import pandas as pd\n\ndf = pd.read_csv(\"https://thefaceanalysis.com/data/face-measurements.csv\")\ndf[(df.measure == \"fwhr\") & (df.group == \"all\")][[\"median\", \"p10\", \"p90\"]]"
+    },
+    {
+      "label": "R",
+      "code": "df <- read.csv(\"https://thefaceanalysis.com/data/face-measurements.csv\")\nsubset(df, measure == \"fwhr\" & group == \"all\")"
+    }
+  ]
+}

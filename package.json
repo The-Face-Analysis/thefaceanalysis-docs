@@ -1,0 +1,15 @@
+{
+  "name": "thefaceanalysis-docs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Developer documentation for The Face Analysis (docs.thefaceanalysis.com): static HTML generated at build time. Tool reference comes from the published MCP package, so it cannot drift from the server.",
+  "type": "module",
+  "scripts": { "build": "node build.mjs", "serve": "npx --yes serve dist -l 4000" },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "thefaceanalysis-data": "^0.1.0",
+    "thefaceanalysis-embed": "^0.1.0",
+    "thefaceanalysis-mcp": "^0.1.0"
+  },
+  "license": "MIT"
+}
