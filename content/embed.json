@@ -95,19 +95,91 @@
       "id": "compact",
       "label": "Compact",
       "width": 360,
-      "height": 560
+      "height": 860
     },
     {
       "id": "standard",
       "label": "Standard",
       "width": 480,
-      "height": 600
+      "height": 730
     },
     {
       "id": "wide",
       "label": "Wide",
       "width": 720,
-      "height": 520
+      "height": 600
+    }
+  ],
+  "langs": [
+    {
+      "code": "en",
+      "name": "English",
+      "credit": "Face analysis by"
+    },
+    {
+      "code": "de",
+      "name": "Deutsch",
+      "credit": "Gesichtsanalyse von"
+    },
+    {
+      "code": "es",
+      "name": "Español",
+      "credit": "Análisis facial de"
+    },
+    {
+      "code": "fr",
+      "name": "Français",
+      "credit": "Analyse du visage par"
+    },
+    {
+      "code": "pt-br",
+      "name": "Português (BR)",
+      "credit": "Análise facial por"
+    },
+    {
+      "code": "nl",
+      "name": "Nederlands",
+      "credit": "Gezichtsanalyse door"
+    },
+    {
+      "code": "tr",
+      "name": "Türkçe",
+      "credit": "Yüz analizi:"
+    },
+    {
+      "code": "it",
+      "name": "Italiano",
+      "credit": "Analisi del viso a cura di"
+    },
+    {
+      "code": "pl",
+      "name": "Polski",
+      "credit": "Analiza twarzy:"
+    },
+    {
+      "code": "ru",
+      "name": "Русский",
+      "credit": "Анализ лица от"
+    },
+    {
+      "code": "ja",
+      "name": "日本語",
+      "credit": "顔分析:"
+    },
+    {
+      "code": "ko",
+      "name": "한국어",
+      "credit": "얼굴 분석 제공:"
+    },
+    {
+      "code": "hi",
+      "name": "हिन्दी",
+      "credit": "चेहरे का विश्लेषण:"
+    },
+    {
+      "code": "id",
+      "name": "Bahasa Indonesia",
+      "credit": "Analisis wajah oleh"
     }
   ],
   "platforms": [
@@ -274,6 +346,10 @@
     {
       "q": "What exactly do I embed?",
       "a": "A small frame that runs one of our free measurement tools on your page. Your visitor chooses a photo, the measurement runs in their browser and the frame shows their result, with a link to the full tool. Your page keeps a visible credit link to The Face Analysis."
+    },
+    {
+      "q": "Is the widget available in my language?",
+      "a": "Yes: the widget and the credit sentence come in 14 languages (English, Deutsch, Español, Français, Português (BR), Nederlands, Türkçe, Italiano, Polski, Русский, 日本語, 한국어, हिन्दी, Bahasa Indonesia). Add data-lang=\"de\" to the script version, or use /embed/de/<tool> in the plain iframe version; English is the default. The text, the labels and the number format of the result are translated. This website itself stays in English, so the credit link and the full-tool link open English pages."
     },
     {
       "q": "Does it cost anything?",

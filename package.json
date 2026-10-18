@@ -8,7 +8,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.1",
     "thefaceanalysis-data": "^0.1.0",
-    "thefaceanalysis-embed": "^0.1.0",
+    "thefaceanalysis-embed": "^0.3.0",
     "thefaceanalysis-mcp": "^0.1.0"
   },
   "license": "MIT"

@@ -249,6 +249,8 @@ pages.push({
     { t: "h3", text: "Script tag" },
     code("HTML", `<div data-tfa-widget="face-shape" data-size="standard"></div>\n<script async src="${MAIN}/embed.js"></script>`),
     { t: "p", text: "The script builds the iframe, keeps its height equal to its content and writes the visible credit link under it into your page. Use one `div` per widget; you can put several on a page. An unknown `data-tfa-widget` value is ignored with a console warning that lists the valid ids." },
+    { t: "h3", text: "Languages" },
+    { t: "p", text: `The widget and the credit sentence come in ${E.langs.length} languages: ${E.langs.map((l) => `\`${l.code}\` (${l.name})`).join(", ")}. English is the default. Add \`data-lang\` to the script version, for example \`data-lang="de"\`; the plain iframe version uses \`${MAIN}/embed/de/face-shape\` and the credit sentence for that language (\`${E.langs[1].credit}\` for German). Only the widget and the credit sentence are translated: thefaceanalysis.com itself is in English, so the credit link and the "full measurements" link open English pages.` },
     { t: "h3", text: "Web component (npm)" },
     code("Install", "npm install thefaceanalysis-embed"),
     code("Use", `<script type="module">import "thefaceanalysis-embed";</script>\n<face-analysis-widget tool="eye-shape" size="wide"></face-analysis-widget>`),
@@ -257,7 +259,7 @@ pages.push({
     { t: "p", text: "The wrapper loads the web component on the client only, so it is safe in server-rendered apps; in Next.js use it inside a Client Component. `import { TOOLS } from \"thefaceanalysis-embed\"` lists the supported ids." },
     { t: "h3", text: "Plain iframe" },
     { t: "p", text: "For pages that do not allow scripts. Include the credit link yourself: it is part of the code and has to stay visible." },
-    code("HTML", `<iframe src="${MAIN}/embed/face-shape" title="Face shape detector by The Face Analysis" width="480" height="600" style="border:0;width:100%;max-width:480px" loading="lazy"></iframe>\n<p style="text-align:center;font:12px system-ui,sans-serif">Face analysis by <a href="${MAIN}/face-shape" target="_blank" rel="noopener">The Face Analysis</a></p>`),
+    code("HTML", `<iframe src="${MAIN}/embed/face-shape" title="Face shape detector by The Face Analysis" width="480" height="730" style="border:0;width:100%;max-width:480px" loading="lazy"></iframe>\n<p style="text-align:center;font:12px system-ui,sans-serif">Face analysis by <a href="${MAIN}/face-shape" target="_blank">The Face Analysis</a></p>`),
     { t: "p", text: "Replace `face-shape` in the address with any id from the table; point the credit link at the same tool's page (the `Full tool` column)." },
     { t: "h2", text: "Options" },
     { t: "table", head: ["Option", "Script tag", "Web component / React", "Values", "Default"], rows: [
