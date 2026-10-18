@@ -283,7 +283,7 @@ pages.push({
     { t: "h2", text: "Who it is for" },
     { t: "ul", items: E.who.map((w) => `**${w.title}.** ${w.body}`) },
     { t: "h2", text: "Privacy and what is counted" },
-    { t: "p", text: "The measurement runs in the visitor's browser: the widget is free, needs no sign-up and loads its face landmark model only after a photo is chosen. Widget use is counted per embedding site (the hostname only). No photo, measurement or result is part of that count." },
+    { t: "p", text: "The measurement runs in the visitor's browser: the widget is free, needs no sign-up and loads its face landmark model only after a photo is chosen. The widget frame loads no analytics and sets no cookies. We only see ordinary server request logs, which include the address of the embedding page. No photo, measurement or result is sent to us." },
     { t: "h2", text: "Terms of use" },
     { t: "ul", items: E.terms },
     { t: "p", text: `Each widget measures proportions in one photo; how every number is made and what a photo cannot measure is in the [methodology](${MAIN}/methodology). Source: [thefaceanalysis-embed](${S.EMBED_REPO}).` },
