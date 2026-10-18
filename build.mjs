@@ -23,7 +23,7 @@ const embedPkg = readJson(join(embedDir, "package.json"));
 const changelog = readJson(join(dataDir, "changelog.json"));
 const ref = readJson(join(dataDir, "reference-set.json"));
 
-const UPDATED = "2026-10-17";
+const UPDATED = "2026-10-18";
 const URL_MCP = S.MCP_URL;
 const code = (label, c) => ({ t: "code", label, code: c });
 
@@ -89,14 +89,14 @@ pages.push({
     { t: "table", head: ["I want to…", "Go to"], rows: [
       ["Let Claude, ChatGPT, Codex or Cursor look up face measurement data", "[MCP server](/mcp)"],
       ["Download the numbers as JSON or CSV", "[Dataset](/data)"],
-      ["Put a face shape finder on my website", "[Embed widget](/embed)"],
+      ["Put a face measurement widget on my website", "[Embed widgets](/embed)"],
       ["Try everything in two minutes", "[Quickstart](/quickstart)"],
     ] },
     { t: "h2", text: "What is published" },
     { t: "table", head: ["Package", "Version", "What it is", "Source"], rows: [
       ["`thefaceanalysis-mcp`", mcpPkg.version, "Read-only MCP server, stdio and hosted HTTP", `[GitHub](${S.MCP_REPO})`],
       ["`thefaceanalysis-data`", dataPkg.version, "Statistics, type rules and thresholds as JSON and CSV", `[GitHub](${S.DATA_REPO})`],
-      ["`thefaceanalysis-embed`", embedPkg.version, "Web component and React wrapper for the widget", `[GitHub](${S.EMBED_REPO})`],
+      ["`thefaceanalysis-embed`", embedPkg.version, "Web component and React wrapper for the 11 widgets", `[GitHub](${S.EMBED_REPO})`],
     ] },
     { t: "h2", text: "What it is based on" },
     { t: "p", text: `All numbers come from ${ref.sample.n} adult faces (${ref.sample.female} women, ${ref.sample.male} men) of the Face Research Lab London Set, measured with a ${ref.engine.landmarks}-point MediaPipe landmarker. They describe those faces, not a population, and the face type splits show how the detectors divide them, not how common a type is. The [methodology](${MAIN}/methodology) states every threshold and what a photo cannot measure.` },
@@ -126,7 +126,7 @@ pages.push({
     { t: "p", text: "Files, columns and examples in Python and R are on the [dataset page](/data)." },
     { t: "h2", text: "5. Put the widget on a page" },
     code("HTML", `<div data-tfa-widget="face-shape" data-size="standard"></div>\n<script async src="${MAIN}/embed.js"></script>`),
-    { t: "p", text: "Sizes, the npm and React versions and the terms are on the [embed page](/embed)." },
+    { t: "p", text: "All widgets, sizes, the npm and React versions, a platform guide and the terms are on the [embed page](/embed)." },
   ],
 });
 
@@ -221,43 +221,72 @@ pages.push({
   ],
 });
 
+const E = JSON.parse(readFileSync(new URL("./content/embed.json", import.meta.url), "utf8"));
+// Bu sayfa 0.2.0'ın özelliklerini (11 araç, TOOLS, tip kimlikleri) anlatıyor. Yüklü paket eskiyse docs
+// yayına GİRMEZ: sıra "site push → npm yayını → docs bağımlılığını yükselt → docs deploy". Yerel deneme: ALLOW_OLD_EMBED=1.
+const EMBED_DOCS_MIN = "0.2.0";
+const semver = (v) => v.split(".").map(Number).reduce((a, n) => a * 1000 + n, 0);
+if (semver(embedPkg.version) < semver(EMBED_DOCS_MIN) && !process.env.ALLOW_OLD_EMBED) {
+  throw new Error(`thefaceanalysis-embed ${embedPkg.version} < ${EMBED_DOCS_MIN}: önce 0.2.0'ı yayınla ve package.json bağımlılığını yükselt (yerelde denemek için ALLOW_OLD_EMBED=1).`);
+}
+const toolTable = { t: "table", head: ["`tool`", "Widget", "What it measures", "Full tool"], rows: E.tools.map((t) => [`\`${t.slug}\``, t.name, t.what, `[${t.fullPath}](${MAIN}${t.fullPath})`]) };
+const WORKS = { script: "Script version works", iframe: "Plan limits apply", link: "Link only", check: "Check in your editor" };
+
 pages.push({
-  path: "/embed", label: "Embed the face shape finder", title: "Embed the Face Shape Finder on Your Website: Script, Web Component and React",
-  description: "Add the free face shape finder to a salon, optician, beard or beauty site. Script tag, web component or React; sizes, attributes, resize messages and terms of use.",
-  h1: "Embed the face shape finder",
-  lede: "A free face shape finder for your own site. The visitor chooses a photo, the measurement runs in their browser with no sign-up, and the widget shows their face shape, fWHR and symmetry. Three ways to add it: a script tag, a web component or a React component.",
+  path: "/embed", label: "Embed the widgets", title: "Embed Free Face Measurement Widgets: Script, Web Component and React",
+  description: `Add ${E.tools.length} free face measurement widgets to any website: face shape, eye shape, fWHR, symmetry and more. Script tag, web component or React; platform guide, options and terms.`,
+  h1: "Embed face measurement widgets",
+  lede: `${E.tools.length} free face measurement widgets for any website: a visitor chooses a photo, the measurement runs in their browser, and your page shows their result with a credit link to [The Face Analysis](${MAIN}). Add one with a script tag, a web component or a React component. No sign-up, no API key, free on commercial sites too.`,
+  faq: E.faq,
   blocks: [
-    { t: "p", text: `A code builder with a live preview is on [thefaceanalysis.com/embed](${MAIN}/embed).` },
-    { t: "h2", text: "Script tag" },
+    { t: "note", text: `A live example page, every widget and a code generator with preview are on [thefaceanalysis.com/embed](${MAIN}/embed). This page is the reference.` },
+    { t: "h2", text: "What your visitors see" },
+    { t: "p", text: "The widget is a small frame on your page. The visitor chooses a front-facing photo, waits a moment while the face is measured in their own browser, and sees their result with a link to the full tool. Three things are on your page: (1) your own content, (2) the widget, which runs in a frame, and (3) a visible credit link that is written into your page's HTML. The credit link is part of your page, not of the frame: a link inside an iframe belongs to the iframe's own document." },
+    { t: "h2", text: "Widgets" },
+    toolTable,
+    { t: "p", text: `Sizes: ${E.sizes.map((s) => `\`${s.id}\` (${s.width} px)`).join(", ")}. The frame is as wide as its container up to that size, and its height follows its content.` },
+    { t: "h2", text: "Quick start" },
+    { t: "h3", text: "Script tag" },
     code("HTML", `<div data-tfa-widget="face-shape" data-size="standard"></div>\n<script async src="${MAIN}/embed.js"></script>`),
-    { t: "p", text: "The script builds the iframe, keeps its height equal to its content and writes a visible credit link under it into your page." },
-    { t: "h2", text: "npm: web component" },
+    { t: "p", text: "The script builds the iframe, keeps its height equal to its content and writes the visible credit link under it into your page. Use one `div` per widget; you can put several on a page. An unknown `data-tfa-widget` value is ignored with a console warning that lists the valid ids." },
+    { t: "h3", text: "Web component (npm)" },
     code("Install", "npm install thefaceanalysis-embed"),
-    code("Use", `<script type="module">import "thefaceanalysis-embed";</script>\n<face-analysis-widget tool="face-shape" size="standard"></face-analysis-widget>`),
-    { t: "h2", text: "npm: React" },
-    code("React", `import { FaceAnalysisWidget } from "thefaceanalysis-embed/react";\n\n<FaceAnalysisWidget size="wide" />`),
-    { t: "p", text: "The wrapper loads the web component on the client only, so it is safe in server-rendered apps." },
-    { t: "h2", text: "Plain iframe" },
-    { t: "p", text: "For pages that block scripts. Include the credit link yourself." },
+    code("Use", `<script type="module">import "thefaceanalysis-embed";</script>\n<face-analysis-widget tool="eye-shape" size="wide"></face-analysis-widget>`),
+    { t: "h3", text: "React" },
+    code("React", `import { FaceAnalysisWidget } from "thefaceanalysis-embed/react";\n\n<FaceAnalysisWidget tool="fwhr" size="standard" />`),
+    { t: "p", text: "The wrapper loads the web component on the client only, so it is safe in server-rendered apps; in Next.js use it inside a Client Component. `import { TOOLS } from \"thefaceanalysis-embed\"` lists the supported ids." },
+    { t: "h3", text: "Plain iframe" },
+    { t: "p", text: "For pages that do not allow scripts. Include the credit link yourself: it is part of the code and has to stay visible." },
     code("HTML", `<iframe src="${MAIN}/embed/face-shape" title="Face shape detector by The Face Analysis" width="480" height="600" style="border:0;width:100%;max-width:480px" loading="lazy"></iframe>\n<p style="text-align:center;font:12px system-ui,sans-serif">Face analysis by <a href="${MAIN}/face-shape" target="_blank" rel="noopener">The Face Analysis</a></p>`),
+    { t: "p", text: "Replace `face-shape` in the address with any id from the table; point the credit link at the same tool's page (the `Full tool` column)." },
     { t: "h2", text: "Options" },
-    { t: "table", head: ["Option", "Script tag", "Web component / React", "Values"], rows: [
-      ["Which widget", "`data-tfa-widget`", "`tool`", "`face-shape` (currently the only one)"],
-      ["Size", "`data-size`", "`size`", "`compact` (360 px), `standard` (480 px), `wide` (720 px)"],
+    { t: "table", head: ["Option", "Script tag", "Web component / React", "Values", "Default"], rows: [
+      ["Which widget", "`data-tfa-widget`", "`tool`", E.tools.map((t) => `\`${t.slug}\``).join(", "), "`face-shape`"],
+      ["Size", "`data-size`", "`size`", E.sizes.map((s) => `\`${s.id}\``).join(", "), "`standard`"],
     ] },
+    { t: "h2", text: "Add it to your platform" },
+    { t: "p", text: "Paste the code into your platform's HTML or embed block. Platforms differ in what they keep: some remove scripts or iframes on free plans. If the script version disappears, use the plain iframe version and add the credit link as normal text; if iframes are removed too, link to the tool page. Steps below come from each platform's own help pages, and anything not verified there says so." },
+    ...E.platforms.flatMap((p) => [
+      { t: "h3", text: p.name },
+      { t: "p", text: `${WORKS[p.works]}.${p.verified ? "" : " Steps not verified from official documentation."}` },
+      { t: "ol", items: p.steps },
+      ...(p.warn ? [{ t: "note", text: p.warn }] : []),
+      ...(p.source ? [{ t: "p", text: `Source: [${p.source.label}](${p.source.url}).` }] : []),
+    ]),
     { t: "h2", text: "Resize messages" },
     { t: "p", text: "The widget posts its content height to the parent window so the iframe can match it. The script and the web component handle this for you; with a plain iframe you can listen yourself." },
     code("JavaScript", `window.addEventListener("message", (e) => {\n  if (e.origin !== "${MAIN}") return;\n  const m = e.data;\n  if (m && m.source === "tfa-embed" && m.type === "resize") {\n    iframe.style.height = Math.ceil(m.height) + "px";\n  }\n});`),
+    { t: "h2", text: "How it works" },
+    { t: "p", text: `The element creates an iframe to \`${MAIN}/embed/<tool>?h=<your hostname>\`. Only \`/embed/<tool>\` pages allow being framed (\`Content-Security-Policy: frame-ancestors *\`) and they are \`noindex\`; the rest of the site is unchanged.` },
+    { t: "h2", text: "Who it is for" },
+    { t: "ul", items: E.who.map((w) => `**${w.title}.** ${w.body}`) },
     { t: "h2", text: "Privacy and what is counted" },
-    { t: "p", text: "The measurement runs in the visitor's browser: the page is free, needs no sign-up and loads the face landmark model only after a photo is chosen. We count widget use per embedding site (the hostname only) to see which embeds are used; no photo, measurement or result is part of that count." },
+    { t: "p", text: "The measurement runs in the visitor's browser: the widget is free, needs no sign-up and loads its face landmark model only after a photo is chosen. Widget use is counted per embedding site (the hostname only). No photo, measurement or result is part of that count." },
     { t: "h2", text: "Terms of use" },
-    { t: "ul", items: [
-      "Free to use on any website, including commercial ones.",
-      "Keep the credit link under the widget visible. Do not hide it, restyle it to invisibility or remove it.",
-      "Do not alter the widget's content or present its reading as a medical or cosmetic diagnosis. It measures proportions in one photo.",
-      "We may change or retire the widget.",
-    ] },
-    { t: "p", text: `Source: [thefaceanalysis-embed](${S.EMBED_REPO}).` },
+    { t: "ul", items: E.terms },
+    { t: "p", text: `Each widget measures proportions in one photo; how every number is made and what a photo cannot measure is in the [methodology](${MAIN}/methodology). Source: [thefaceanalysis-embed](${S.EMBED_REPO}).` },
+    { t: "h2", text: "Frequently asked questions" },
+    ...E.faq.flatMap((f) => [{ t: "h3", text: f.q }, { t: "p", text: f.a }]),
   ],
 });
 
@@ -286,7 +315,8 @@ pages.push({
   blocks: [
     { t: "h2", text: "Packages and docs" },
     { t: "table", head: ["Date", "Change"], rows: [
-      [UPDATED, `First release of \`${S.MCP_NPM}\`, \`thefaceanalysis-data\` and \`thefaceanalysis-embed\` at 0.1.0; these docs; the hosted MCP server at \`${URL_MCP}\`.`],
+      [UPDATED, "`thefaceanalysis-embed` 0.2.0: all 11 measurement widgets (it was face shape only), `TOOLS` export and typed tool ids, a warning for unknown tool ids, a rewritten README; the embed page now has a live example, a platform guide and the full tool list."],
+      ["2026-10-17", `First release of \`${S.MCP_NPM}\`, \`thefaceanalysis-data\` and \`thefaceanalysis-embed\` at 0.1.0; these docs; the hosted MCP server at \`${URL_MCP}\`.`],
     ] },
     { t: "h2", text: "Measurement method" },
     { t: "p", text: `The method last changed ${changelog.methodology.lastChanged} (${changelog.methodology.revisions} revisions). Each entry says what changed and whether any previous result is affected. The same list is available as [changelog.json](${MAIN}/data/changelog.json).` },

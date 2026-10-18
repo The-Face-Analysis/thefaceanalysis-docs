@@ -20,3 +20,10 @@ npm run serve     # http://localhost:4000
 - The MCP client setup text (`content/shared.json`) is a snapshot of the verified commands on
   [thefaceanalysis.com/mcp](https://thefaceanalysis.com/mcp). Client menus change; update both when one does.
 - Deploy: `Dockerfile` (Node build, then `server.mjs`, a dependency-free static server on port 8080). Code MIT, aggregate data CC BY 4.0.
+
+## Embed content is a copy
+
+`content/embed.json` (widget list, platform guide, terms, FAQ for `/embed`) is exported from the site repo:
+`node scripts/export-embed-docs.mjs` in `surgio_marketing` rewrites it, and that repo's `scripts/verify-embed.mjs` fails when the two differ.
+The `/embed` page describes `thefaceanalysis-embed@0.2.0`, so the build **refuses to run with an older installed version**. Release order:
+site push, npm publish of the embed package, bump the dependency here, redeploy. For a local preview only: `ALLOW_OLD_EMBED=1 node build.mjs`.

@@ -1,0 +1,299 @@
+{
+  "updated": "2026-10-18",
+  "tools": [
+    {
+      "slug": "face-shape",
+      "name": "Face shape",
+      "title": "Find your face shape",
+      "what": "Which of seven face shapes a front photo reads as, from the width and length of forehead, cheekbones and jaw.",
+      "fullPath": "/face-shape-detector",
+      "attrPath": "/face-shape"
+    },
+    {
+      "slug": "eye-shape",
+      "name": "Eye shape",
+      "title": "Find your eye shape",
+      "what": "Eye shape (almond, round, hooded, upturned or downturned), eye spacing and canthal tilt from the eye landmarks.",
+      "fullPath": "/eye-shape",
+      "attrPath": "/eye-shape"
+    },
+    {
+      "slug": "canthal-tilt",
+      "name": "Canthal tilt",
+      "title": "Measure your canthal tilt",
+      "what": "The angle of each eye's outer corner relative to the inner corner, in degrees, for each eye.",
+      "fullPath": "/canthal-tilt",
+      "attrPath": "/canthal-tilt"
+    },
+    {
+      "slug": "nose-shape",
+      "name": "Nose proportions",
+      "title": "Measure your nose proportions",
+      "what": "Nose width against the face, nose length against its width, and how it compares to the classic one-eye-width canon.",
+      "fullPath": "/nose-shape",
+      "attrPath": "/nose-shape"
+    },
+    {
+      "slug": "lip-shape",
+      "name": "Lip proportions",
+      "title": "Measure your lip proportions",
+      "what": "Lip fullness, the balance of upper to lower lip, the Cupid's bow and the angle of the mouth corners.",
+      "fullPath": "/lip-shape",
+      "attrPath": "/lip-shape"
+    },
+    {
+      "slug": "facial-thirds",
+      "name": "Facial thirds",
+      "title": "Measure your facial thirds",
+      "what": "How the face height splits into upper, middle and lower thirds, and the middle-to-lower comparison.",
+      "fullPath": "/facial-thirds",
+      "attrPath": "/facial-thirds"
+    },
+    {
+      "slug": "fwhr",
+      "name": "fWHR",
+      "title": "Measure your fWHR",
+      "what": "Facial width-to-height ratio: cheekbone width divided by the height from brow to upper lip.",
+      "fullPath": "/fwhr-calculator",
+      "attrPath": "/fwhr-calculator"
+    },
+    {
+      "slug": "midface-ratio",
+      "name": "Midface ratio",
+      "title": "Measure your midface ratio",
+      "what": "The gap between the pupils divided by the height from the pupil line to the upper lip.",
+      "fullPath": "/midface-ratio",
+      "attrPath": "/midface-ratio"
+    },
+    {
+      "slug": "face-symmetry",
+      "name": "Face symmetry",
+      "title": "Check your face symmetry",
+      "what": "How closely the left and right halves of the face mirror each other, measured from paired landmarks.",
+      "fullPath": "/face-symmetry-test",
+      "attrPath": "/face-symmetry-test"
+    },
+    {
+      "slug": "golden-ratio",
+      "name": "Golden ratio",
+      "title": "Measure your golden ratio fit",
+      "what": "How close three facial proportions sit to the golden ratio of 1.618, as a percentage fit.",
+      "fullPath": "/golden-ratio-face-calculator",
+      "attrPath": "/golden-ratio-face-calculator"
+    },
+    {
+      "slug": "pupillary-distance",
+      "name": "Pupillary distance",
+      "title": "Estimate your pupillary distance",
+      "what": "The distance between the pupils in millimetres, using the iris as the ruler, with its honest error band.",
+      "fullPath": "/pupillary-distance",
+      "attrPath": "/pupillary-distance"
+    }
+  ],
+  "sizes": [
+    {
+      "id": "compact",
+      "label": "Compact",
+      "width": 360,
+      "height": 560
+    },
+    {
+      "id": "standard",
+      "label": "Standard",
+      "width": 480,
+      "height": 600
+    },
+    {
+      "id": "wide",
+      "label": "Wide",
+      "width": 720,
+      "height": 520
+    }
+  ],
+  "platforms": [
+    {
+      "id": "wordpress-com",
+      "name": "WordPress.com",
+      "works": "iframe",
+      "steps": [
+        "Open the post or page and select the block inserter (+).",
+        "Search for HTML and choose the Custom HTML block.",
+        "Select Edit HTML if the block is in preview, paste the code and select Update."
+      ],
+      "warn": "Scripts and iframes are kept only on a paid plan with hosting features active (the help page says a paid plan alone is not enough). On the free plan they are removed when you save, so use a plain link to the widget page. Self-hosted WordPress.org uses the same block name, but its rules were not verified from official documentation: check in your editor.",
+      "verified": true,
+      "source": {
+        "label": "WordPress.com: Custom HTML block",
+        "url": "https://wordpress.com/support/wordpress-editor/blocks/custom-html-block/"
+      }
+    },
+    {
+      "id": "wix",
+      "name": "Wix",
+      "works": "iframe",
+      "steps": [
+        "Select Add Elements, then Embed Code, then Embed HTML (or Embed a site).",
+        "Choose Enter Code (or Enter Website Address) and paste the code or the widget address.",
+        "Select Apply, then set the element's width and height to 100% so it is not cropped."
+      ],
+      "warn": "Both elements are iframes and only https addresses are shown on a published site. Because the code runs inside Wix's own frame, also add the credit link as normal text on the page itself.",
+      "verified": true,
+      "source": {
+        "label": "Wix: Adding HTML code",
+        "url": "https://support.wix.com/en/the-wix-editor/more/article/adding-html-code"
+      }
+    },
+    {
+      "id": "squarespace",
+      "name": "Squarespace",
+      "works": "script",
+      "steps": [
+        "Add a Code block, open its editor and set the mode to HTML, then paste the code.",
+        "Or add an Embed block, choose Code snippet and paste the code under Embed Data.",
+        "Save and check the page in a private window."
+      ],
+      "warn": "Code blocks need the Core, Plus or Advanced plan; Embed blocks are on all plans (whether they keep scripts is not stated, so check). Custom code can be hidden while you are logged in, and Squarespace support does not troubleshoot custom code.",
+      "verified": true,
+      "source": {
+        "label": "Squarespace: Code blocks",
+        "url": "https://support.squarespace.com/hc/en-us/articles/206543167-Using-code-blocks"
+      }
+    },
+    {
+      "id": "google-sites",
+      "name": "Google Sites",
+      "works": "script",
+      "steps": [
+        "Select Insert, then Embed, then Embed code.",
+        "Paste the code and select Next, then Insert.",
+        "Select Publish to see it: the editor does not run the widget."
+      ],
+      "warn": "JavaScript must be inside script tags, as in our snippet. Some sites do not allow embedding, and the page says embeds are for desktop editing.",
+      "verified": true,
+      "source": {
+        "label": "Google Sites: Embed",
+        "url": "https://support.google.com/sites/answer/90569?hl=en"
+      }
+    },
+    {
+      "id": "carrd",
+      "name": "Carrd",
+      "works": "script",
+      "steps": [
+        "Add an Embed element.",
+        "Set Type to Code and Style to Inline so it renders where the element sits.",
+        "Paste the code and publish the site: nothing shows in the builder."
+      ],
+      "warn": "Needs Pro Standard or higher. The page says script tags are accepted.",
+      "verified": true,
+      "source": {
+        "label": "Carrd: Embedding custom code",
+        "url": "https://carrd.com/docs/building/embedding-custom-code"
+      }
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "works": "link",
+      "steps": [
+        "Type /embed and choose Embed.",
+        "Paste the widget address, for example https://thefaceanalysis.com/embed/face-shape.",
+        "Add the credit link as normal text under it."
+      ],
+      "warn": "Notion embeds take an address only: raw iframe code and script tags are not accepted. It may not render widgets from addresses outside its supported list, so check the result; if it does not load, link to the tool page instead.",
+      "verified": true,
+      "source": {
+        "label": "Notion: Embed and connect other apps",
+        "url": "https://www.notion.com/help/embed-and-connect-other-apps"
+      }
+    },
+    {
+      "id": "ghost",
+      "name": "Ghost",
+      "works": "check",
+      "steps": [
+        "Add an HTML card to the post.",
+        "Paste the code.",
+        "Open the published post: the editor shows only a placeholder."
+      ],
+      "warn": "Ghost describes the HTML card as a way of adding code to posts; whether scripts or iframes are kept was not stated in the documentation. Check the published page.",
+      "verified": true,
+      "source": {
+        "label": "Ghost: Cards",
+        "url": "https://ghost.org/help/cards"
+      }
+    },
+    {
+      "id": "webflow",
+      "name": "Webflow",
+      "works": "check",
+      "steps": [
+        "Add a Code Embed element inside a container.",
+        "Paste the code and preview."
+      ],
+      "warn": "Webflow's code embed is reported to need a paid site plan, and its size limit was not consistent between pages. Not verified from the full official page: check in your editor.",
+      "verified": false
+    },
+    {
+      "id": "others",
+      "name": "Shopify, Blogger, Weebly and others",
+      "works": "check",
+      "steps": [
+        "Look for a Custom Liquid or custom HTML block (Shopify), an HTML/JavaScript gadget or the post HTML view (Blogger), or an Embed Code element (Weebly).",
+        "Paste the code and publish to test."
+      ],
+      "warn": "The exact steps for these were not verified from official documentation, so check them in your editor. If your platform strips scripts, use the plain iframe version; if it strips iframes too, link to the tool page.",
+      "verified": false
+    }
+  ],
+  "who": [
+    {
+      "title": "Hair salons and barbers",
+      "body": "Put the face shape finder next to your cut and style guides so a client arrives knowing their shape."
+    },
+    {
+      "title": "Opticians and eyewear shops",
+      "body": "Face shape, eye spacing and pupillary distance beside your frame guides, with the honest error band shown."
+    },
+    {
+      "title": "Beauty, beard and makeup blogs",
+      "body": "Eye, lip and nose proportions turn an article about a feature into something the reader can try."
+    },
+    {
+      "title": "Teachers and researchers",
+      "body": "fWHR, facial thirds, symmetry and the golden ratio show how a measurement works and how wide the normal range is."
+    }
+  ],
+  "terms": [
+    "Free to use on any website, including commercial ones. No sign-up and no API key.",
+    "Keep the credit link under the widget visible. Do not hide it, restyle it to invisibility or remove it.",
+    "Do not alter the widget or present its reading as a medical or cosmetic diagnosis: it measures proportions in one photo.",
+    "We may change or retire a widget. Widget use is counted per embedding site (hostname only)."
+  ],
+  "faq": [
+    {
+      "q": "What exactly do I embed?",
+      "a": "A small frame that runs one of our free measurement tools on your page. Your visitor chooses a photo, the measurement runs in their browser and the frame shows their result, with a link to the full tool. Your page keeps a visible credit link to The Face Analysis."
+    },
+    {
+      "q": "Does it cost anything?",
+      "a": "No. The widgets are free to use on any website, including commercial ones, with no sign-up. The only condition is that the credit link under the widget stays visible."
+    },
+    {
+      "q": "What happens to my visitors' photos?",
+      "a": "The measurement runs in the visitor's browser: the tool is free, needs no sign-up and loads its face landmark model only after a photo is chosen. We count widget use per embedding site (the hostname only); no photo, measurement or result is part of that count."
+    },
+    {
+      "q": "Will it slow my page down?",
+      "a": "Barely. The script is a few kilobytes, the frame loads lazily, and the heavy measurement model downloads only when a visitor actually chooses a photo."
+    },
+    {
+      "q": "Can I change the colours or remove the credit link?",
+      "a": "No. The widget has three fixed sizes (compact, standard and wide) and the credit link has to stay visible. If a platform strips the script version, use the plain iframe version and add the credit link as normal text."
+    },
+    {
+      "q": "Is this a medical or cosmetic tool?",
+      "a": "No. Each widget measures proportions in one photo and says so. Angle, smile and lighting can move a borderline reading, and a result is not a diagnosis, a judgement or advice about any procedure."
+    }
+  ]
+}
