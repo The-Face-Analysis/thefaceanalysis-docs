@@ -8,7 +8,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 import { renderMd } from "./lib/blocks.mjs";
-import { BASE, CSS, JS, MAIN, ORG, buildNav, page } from "./lib/layout.mjs";
+import { BASE, CSS, JS, MAIN, ORG, buildNav, mdPath, page } from "./lib/layout.mjs";
 
 const require = createRequire(import.meta.url);
 const S = JSON.parse(readFileSync(new URL("./content/shared.json", import.meta.url), "utf8"));
@@ -336,9 +336,17 @@ cpSync("public", "dist", { recursive: true });
 writeFileSync("dist/assets/docs.css", CSS.trim());
 writeFileSync("dist/assets/docs.js", JS.trim());
 const outPath = (p) => (p === "/" ? "dist/index.html" : `dist${p}.html`);
+// Her sayfanın markdown sürümü aynı bloklardan: /foo.md (ana sayfa /index.md). Sunucu
+// `Accept: text/markdown` isteğine de bunu döner. Bağlantılar mutlak, böylece dosya tek başına okunabilir.
+const pageMd = (p) => [
+  `# ${p.h1}`, "",
+  `> Documentation index: ${BASE}/llms.txt · HTML version: ${BASE}${p.path} · Updated ${UPDATED}`, "",
+  renderMd([{ t: "p", text: p.lede }, ...p.blocks], BASE), "",
+].join("\n");
 for (const p of pages) {
   mkdirSync(dirname(outPath(p.path)), { recursive: true });
   writeFileSync(outPath(p.path), page({ p, nav, flat, updated: UPDATED }));
+  writeFileSync(`dist${mdPath(p.path)}`, pageMd(p));
 }
 writeFileSync("dist/404.html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page not found | The Face Analysis developer docs</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/assets/docs.css"></head><body><main style="max-width:640px;margin:15vh auto;padding:0 20px"><h1>Page not found</h1><p>That page is not in the docs. Start from the <a href="/">overview</a> or the <a href="/quickstart">quickstart</a>.</p></main></body></html>`);
 writeFileSync("dist/robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${BASE}/sitemap.xml\n`);
@@ -349,7 +357,7 @@ const llms = [
   "> Documentation for the free, open-source developer tools of The Face Analysis (thefaceanalysis.com): a read-only MCP server with sourced face measurement statistics and a face shape classifier, the dataset as JSON and CSV (CC BY 4.0), and an embeddable face shape widget. Numbers come from 102 faces and describe those faces, not a population.", "",
   `Hosted MCP server: ${URL_MCP}`, `Source: ${ORG}`, "",
   "## Docs", "",
-  ...pages.map((p) => `- [${p.h1}](${BASE}${p.path}): ${p.description}`), "",
+  ...pages.map((p) => `- [${p.h1}](${BASE}${mdPath(p.path)}): ${p.description}`), "",
   "## Optional", "",
   `- [Methodology](${MAIN}/methodology): how every number is made and what is not measured.`,
   `- [Face measurement statistics](${MAIN}/face-measurement-statistics): the data as a page.`,
@@ -358,6 +366,6 @@ const llms = [
 writeFileSync("dist/llms.txt", llms);
 writeFileSync("dist/llms-full.txt", [
   "# The Face Analysis developer docs (full text)", "", `Source: ${BASE} · Updated ${UPDATED}`, "",
-  ...pages.map((p) => `# ${p.h1}\n\nURL: ${BASE}${p.path}\n\n${renderMd([{ t: "p", text: p.lede }, ...p.blocks], BASE)}\n`),
+  ...pages.map((p) => `# ${p.h1}\n\nURL: ${BASE}${p.path} (markdown: ${BASE}${mdPath(p.path)})\n\n${renderMd([{ t: "p", text: p.lede }, ...p.blocks], BASE)}\n`),
 ].join("\n\n"));
 console.log(`built ${pages.length} pages · tools documented: ${tools.length} · mcp ${mcpPkg.version} · data ${dataPkg.version} · embed ${embedPkg.version}`);
